@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+
+  react-app:
+    container_name: react-app
+    image: node:21.5.0
+    volumes:
+      - ./react-app:/home/node/react-app
+    ports:
+      - 3000:3000
+    working_dir: /home/node/react-app
+    command: bash -c "npm install && npm run start"
+    depends_on:
+      - springboot
+
+  springboot:
+    container_name: springboot
+    build:
+      context: .
+      dockerfile: springboot/Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/compose-postgres
+      - SPRING_DATASOURCE_USERNAME=compose-postgres
+      - SPRING_DATASOURCE_PASSWORD=compose-postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    image: postgres:13.1-alpine
+    environment:
+      - POSTGRES_USER=compose-postgres
+      - POSTGRES_PASSWORD=compose-postgres
