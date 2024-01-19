@@ -1,0 +1,11 @@
+# Default values for react-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+imageName: dobsondev/example-springboot-app
+imageTag: v0.1
+imagePullPolicy: Always
+
+environment: local

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-deployment
+  labels:
+    name: {{ .Chart.Name }}-deployment
+    app: springboot-devops
+    component: springboot-app
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      name: {{ .Chart.Name }}-pod
+      app: springboot-devops
+      component: springboot-app
+  template:
+    metadata:
+      name: {{ .Chart.Name }}-pod
+      labels:
+        name: {{ .Chart.Name }}-pod
+        app: springboot-devops
+        component: springboot-app
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-container
+          image: {{ .Values.imageName }}:{{ .Values.imageTag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Chart.Name }}-config
+                  key: environment-name
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://postgres:5432/compose-postgres"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "postgres"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "postgres"
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              value: "update"

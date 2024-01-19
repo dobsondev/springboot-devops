@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-deployment
+  labels:
+    name: {{ .Chart.Name }}-deployment
+    app: springboot-devops
+    component: database
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      name: {{ .Chart.Name }}-pod
+      app: springboot-devops
+      component: database
+  template:
+    metadata:
+      name: {{ .Chart.Name }}-pod
+      labels:
+        name: {{ .Chart.Name }}-pod
+        app: springboot-devops
+        component: database
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}-container
+        image: {{ .Values.imageName }}:{{ .Values.imageTag }}
+        ports:
+          - containerPort: 5432
+        env:
+          # Don't do this ever, this is a demo
+          - name: POSTGRES_USER
+            value: "postgres"
+          - name: POSTGRES_PASSWORD
+            value: "postgres"
+          - name: POSTGRES_HOST_AUTH_METHOD
+            value: trust

@@ -31,6 +31,38 @@ You can now use the following links:
 1. [http://localhost:3000](http://localhost:3000) will contain the frontend React application.
 2. [http://localhost:8080](http://localhost:8080) will contain the backend Spring Boot application, but you will want to go to [http://localhost:8080/api/tasks](http://localhost:8080/api/tasks) to see a display of all the tasks in your browser.
 
+## Helm
+
+### Postgres Release on Minikube
+
+```
+helm install example-postgres-release-1 helm/postgres
+```
+
+### Backend Release on Minikube
+
+```
+helm install -f helm/springboot/environments/minikube.yaml example-springboot-release-1 helm/springboot
+```
+
+To see the backend running via Minikube use:
+
+```
+minikube service springboot-service
+```
+
+### Frontend Release on Minikube
+
+```
+helm install -f helm/react-app/environments/minikube.yaml example-react-app-release-1 helm/react-app
+```
+
+To see the frontend running via Minikube use:
+
+```
+minikube service react-app-service
+```
+
 ## Postgres Commands
 
 I am not as familiar with using Postgres as I am other database tools, so I wanted to create a list of Postgres commands here for my own reference.

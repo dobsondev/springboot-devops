@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-deployment
+  labels:
+    name: {{ .Chart.Name }}-deployment
+    app: springboot-devops
+    component: react-app
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      name: {{ .Chart.Name }}-pod
+      app: springboot-devops
+      component: react-app
+  template:
+    metadata:
+      name: {{ .Chart.Name }}-pod
+      labels:
+        name: {{ .Chart.Name }}-pod
+        app: springboot-devops
+        component: react-app
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-container
+          image: {{ .Values.imageName }}:{{ .Values.imageTag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          ports:
+            - containerPort: 3000
+          env:
+            - name: ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Chart.Name }}-config
+                  key: environment-name
