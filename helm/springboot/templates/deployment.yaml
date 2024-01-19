@@ -34,7 +34,7 @@ spec:
                   name: {{ .Chart.Name }}-config
                   key: environment-name
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:postgresql://postgres:5432/compose-postgres"
+              value: "jdbc:postgresql://postgres-service:5432/postgres"
             - name: SPRING_DATASOURCE_USERNAME
               value: "postgres"
             - name: SPRING_DATASOURCE_PASSWORD

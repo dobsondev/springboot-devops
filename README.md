@@ -1,6 +1,16 @@
-# React / Spring Boot DevOps Example
+# React / Spring Boot DevOps Example Project
 
 This is a sample application that provides a "Task Tracker" application. The backend API is written in Java using Spring Boot which connects to a Postgres database and the frontend is a React app.
+
+Technologies used:
+
+- [React](https://react.dev/)
+- [Spring Boot](https://spring.io/projects/spring-boot/)
+- [Postgres](https://www.postgresql.org/)
+- [Docker](https://www.docker.com/)
+- [Kubernetes](https://kubernetes.io/)
+- [Minikube](https://minikube.sigs.k8s.io/docs/)
+- [Helm](https://helm.sh/)
 
 ## Local Setup
 
@@ -31,24 +41,72 @@ You can now use the following links:
 1. [http://localhost:3000](http://localhost:3000) will contain the frontend React application.
 2. [http://localhost:8080](http://localhost:8080) will contain the backend Spring Boot application, but you will want to go to [http://localhost:8080/api/tasks](http://localhost:8080/api/tasks) to see a display of all the tasks in your browser.
 
-## Helm
+## Helm & Minikube Setup
+
+To deploy this application on a Minikube cluster (local Kubernetes cluster) we can use Helm. To use this part of the setup, you must have the following already installed on your local system:
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Kubernetes / kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [Minikube](https://minikube.sigs.k8s.io/docs/start/)
+- [Helm](https://helm.sh/docs/intro/install/)
+
+Be sure to start your Minikube cluster before attempting to install the Helm releases. This can be done by running `minikube start`.
+
+Be sure to install the Helm releases in the following order:
+
+1. Postgres
+2. Spring Boot Backend
+3. React Frontend
 
 ### Postgres Release on Minikube
+
+Postgres can be installed on the Minikube cluster so that the Spring Boot application has a database to use. Without it the application will fail to run. To install Postgres on your Minikube cluster using the following command:
 
 ```
 helm install example-postgres-release-1 helm/postgres
 ```
 
+Note `example-postgres-release-1` can be replaced with whatever release name you want to use.
+
 ### Backend Release on Minikube
+
+To install the Spring Boot release on your Minikube cluster, using the following command:
 
 ```
 helm install -f helm/springboot/environments/minikube.yaml example-springboot-release-1 helm/springboot
 ```
 
+Note `example-springboot-release-1` can be replaced with whatever release name you want to use.
+
 To see the backend running via Minikube use:
 
 ```
 minikube service springboot-service
+```
+
+This will open up a browser window that will show the Spring Boot application running. Navigate to `/api/tasks` and you should see JSON containing the current tasks. When the application just starts, that JSON code should look like:
+
+```
+[
+   {
+      "id":1,
+      "title":"Task #1",
+      "description":"Description for task 1.",
+      "reminder":true
+   },
+   {
+      "id":2,
+      "title":"Task #2",
+      "description":"Description for task 2.",
+      "reminder":true
+   },
+   {
+      "id":3,
+      "title":"Task #3",
+      "description":"Description for task 3.",
+      "reminder":true
+   }
+]
 ```
 
 ### Frontend Release on Minikube
@@ -57,11 +115,57 @@ minikube service springboot-service
 helm install -f helm/react-app/environments/minikube.yaml example-react-app-release-1 helm/react-app
 ```
 
+Note `example-react-app-release-1` can be replaced with whatever release name you want to use.
+
 To see the frontend running via Minikube use:
 
 ```
 minikube service react-app-service
 ```
+
+This will open up a browser window that will show the React application running.
+
+### Extra Tips/Tricks
+
+If you have already installed via Helm then trying to re-install will produce the following error:
+
+```
+Error: INSTALLATION FAILED: cannot re-use a name that is still in use
+```
+
+In this case you will either need to use the `upgrade` command or `uninstall` command. The `upgrade` command will allow you to upgrade your deployment so that you can rollback and should be used in most real world cases. The `uninstall` command will remove the release entirely at which point you can then re-install the release.
+
+To upgrade a release using helm use the `upgrade` commmand. An example:
+
+```
+helm upgrade example-springboot-release-1 helm/springboot -f helm/springboot/environments/minikube.yaml
+```
+
+Alternatively, you can uninstall a deployment using the `uninstall` command. An example looks like:
+
+```
+helm uninstall example-postgres-release-1
+```
+
+## Minikube `kubectl` Commands
+
+After running `minikube start` your `kubectl` context will be set to use Minikube. This means any commands you run with `kubectl` should connect to Minikube.
+
+---
+
+Get all pods, services, deployments and replicasets running on Minikube:
+
+```
+kubectl get all
+```
+
+Describe a pod, service, deployment or replicaset on the cluster:
+
+```
+kubectl describe [TYPE NAME_PREFIX]
+```
+
+eg: `kubectl describe deployment postgres-deployment` or `kubectl describe pod/react-app-deployment-657d6b7f4d-9ckf6`
 
 ## Postgres Commands
 

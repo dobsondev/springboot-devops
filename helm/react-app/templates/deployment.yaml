@@ -33,3 +33,5 @@ spec:
                 configMapKeyRef:
                   name: {{ .Chart.Name }}-config
                   key: environment-name
+            - name: REACT_APP_API_URL
+              value: "http://springboot-service/api"

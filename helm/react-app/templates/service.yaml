@@ -4,7 +4,8 @@ metadata:
   name: {{ .Chart.Name }}-service
   labels:
     name: {{ .Chart.Name }}-service
-    app: {{ .Chart.Name }}
+    app: springboot-devops
+    component: react-app
 spec:
   type: NodePort
   ports:
