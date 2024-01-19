@@ -9,6 +9,8 @@ services:
       - ./react-app:/home/node/react-app
     ports:
       - 3000:3000
+    environment:
+      - REACT_APP_API_URL=http://localhost:8080/api
     working_dir: /home/node/react-app
     command: bash -c "npm install && npm run start"
     depends_on:
@@ -17,8 +19,8 @@ services:
   springboot:
     container_name: springboot
     build:
-      context: .
-      dockerfile: springboot/Dockerfile
+      context: ./springboot
+      dockerfile: Dockerfile
     ports:
       - 8080:8080
     environment:

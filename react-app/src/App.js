@@ -5,7 +5,7 @@ import Tasks from "./components/Tasks"
 import AddTask from './components/AddTask'
 
 const App = () => {
-  const api_url = 'http://localhost:8080/api'
+  const api_url = process.env.REACT_APP_API_URL
 
   const [showAddTask, setShowAddTask] = useState(false)
   const [tasks, setTasks] = useState([])

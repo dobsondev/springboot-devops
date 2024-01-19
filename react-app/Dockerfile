@@ -1,7 +1,11 @@
 FROM node:21.5.0
-WORKDIR /home/node/react-app
-COPY ./react-app/package.json .
-RUN npm install --quiet
-COPY ./react-app/. .
+
+WORKDIR /app
+COPY ./package.json .
+RUN npm install
+COPY . .
+RUN npm run build --production
+
+RUN npm install -g serve
 EXPOSE 3000
-CMD ["npm", "run", "build"]
+CMD ["serve", "-s", "build"] 
