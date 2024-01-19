@@ -8,5 +8,4 @@ imageName: dobsondev/example-react-app
 imageTag: v0.1
 imagePullPolicy: Always
 
-reactAppApiUrl: http://localhost:8080/api
 environment: local

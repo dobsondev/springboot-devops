@@ -73,7 +73,7 @@ Note `example-postgres-release-1` can be replaced with whatever release name you
 To install the Spring Boot release on your Minikube cluster, using the following command:
 
 ```
-helm install -f helm/springboot/environments/minikube.yaml example-springboot-release-1 helm/springboot
+helm install -f helm/environments/minikube.yaml example-springboot-release-1 helm/springboot
 ```
 
 Note `example-springboot-release-1` can be replaced with whatever release name you want to use.
@@ -112,7 +112,7 @@ This will open up a browser window that will show the Spring Boot application ru
 ### Frontend Release on Minikube
 
 ```
-helm install -f helm/react-app/environments/minikube.yaml example-react-app-release-1 helm/react-app
+helm install -f helm/environments/minikube.yaml example-react-app-release-1 helm/react-app
 ```
 
 Note `example-react-app-release-1` can be replaced with whatever release name you want to use.
@@ -151,6 +151,8 @@ helm uninstall example-postgres-release-1
 
 After running `minikube start` your `kubectl` context will be set to use Minikube. This means any commands you run with `kubectl` should connect to Minikube.
 
+If you ever want to just restart your Minikube cluster - that can easily be done by using `minikube delete` and then running `minikube start` again after. This will allow you to reset Minikube to a blank slate.
+
 ---
 
 Get all pods, services, deployments and replicasets running on Minikube:
@@ -166,6 +168,14 @@ kubectl describe [TYPE NAME_PREFIX]
 ```
 
 eg: `kubectl describe deployment postgres-deployment` or `kubectl describe pod/react-app-deployment-657d6b7f4d-9ckf6`
+
+Login to a pod to run a command (like cURL):
+
+```
+kubectl exec -it <pod-name> -- /bin/sh
+```
+
+eg: `kubectl exec -it pod/react-app-deployment-74986868db-8stn8 -- /bin/sh`. Once in a pod like this you could run commands such as cURL to test if your DNS are setup properly, something like `curl http://springboot-service:8080/api/tasks` will test if a React pod can connect to the Spring Boot service to get JSON responses back from the backend API.
 
 ## Postgres Commands
 
