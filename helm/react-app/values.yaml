@@ -4,8 +4,9 @@
 
 replicaCount: 2
 
-imageName: dobsondev/example-react-app
+imageName: dobsondev/springboot-devops_react
 imageTag: v0.1
 imagePullPolicy: Always
 
+backendApiUrl: http://springboot.local/api
 environment: local

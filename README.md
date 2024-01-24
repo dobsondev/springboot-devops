@@ -50,7 +50,23 @@ To deploy this application on a Minikube cluster (local Kubernetes cluster) we c
 - [Minikube](https://minikube.sigs.k8s.io/docs/start/)
 - [Helm](https://helm.sh/docs/intro/install/)
 
-Be sure to start your Minikube cluster before attempting to install the Helm releases. This can be done by running `minikube start`.
+Be sure to start your Minikube cluster before attempting to install the Helm releases. This can be done by running the following command:
+
+```
+minikube start
+```
+
+You will also need to install the `ingress` addon for Minikube to allow ingress to our backend service. More information about this process can be found at https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/. This can be done with the following command:
+
+```
+minikube addons enable ingress
+```
+
+You can verify the Ingress Controller pod is running with the following command:
+
+```
+kubectl get pods -n ingress-nginx
+```
 
 Be sure to install the Helm releases in the following order:
 
@@ -125,6 +141,8 @@ minikube service react-app-service
 
 This will open up a browser window that will show the React application running.
 
+### Minikube Tunnel
+
 ### Extra Tips/Tricks
 
 If you have already installed via Helm then trying to re-install will produce the following error:
@@ -176,6 +194,22 @@ kubectl exec -it <pod-name> -- /bin/sh
 ```
 
 eg: `kubectl exec -it pod/react-app-deployment-74986868db-8stn8 -- /bin/sh`. Once in a pod like this you could run commands such as cURL to test if your DNS are setup properly, something like `curl http://springboot-service:8080/api/tasks` will test if a React pod can connect to the Spring Boot service to get JSON responses back from the backend API.
+
+## Docker Commands
+
+Create a push the Spring Boot image to Dockerhub:
+
+```
+docker build -t dobsondev/springboot-devops_springboot:v0.1 ./springboot
+docker push dobsondev/springboot-devops_springboot:v0.1
+```
+
+Create a push the React image to Dockerhub:
+
+```
+docker build -t dobsondev/springboot-devops_react:v0.1 ./react-app
+docker push dobsondev/springboot-devops_react:v0.1
+```
 
 ## Postgres Commands
 

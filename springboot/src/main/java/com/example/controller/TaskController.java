@@ -22,7 +22,7 @@ import com.example.model.Task;
 import com.example.repository.TaskRepository;
 
 // React App
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://react-app-service:3000"})
 @RestController
 @RequestMapping("/api")
 public class TaskController {
