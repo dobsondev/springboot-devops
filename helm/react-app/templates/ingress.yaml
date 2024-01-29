@@ -3,16 +3,16 @@ kind: Ingress
 metadata:
   name: {{ .Chart.Name }}-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /api/tasks
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: springboot.local
+    - host: reactapp.local
       http:
         paths:
-          - path: /api/tasks
+          - path: /
             pathType: Prefix
             backend:
               service:
                 name: {{ .Chart.Name }}-service
                 port:
-                  number: {{ .Values.springbootPort }}
+                  number: {{ .Values.reactPort }}

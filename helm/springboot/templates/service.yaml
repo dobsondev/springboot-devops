@@ -8,8 +8,8 @@ metadata:
     component: springboot-app
 spec:
   ports:
-    - port: 8080
-      targetPort: 8080
+    - port: {{ .Values.springbootPort }}
+      targetPort: {{ .Values.springbootPort }}
   selector:
     name: {{ .Chart.Name }}-pod
     app: springboot-devops

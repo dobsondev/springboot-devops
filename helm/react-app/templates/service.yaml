@@ -9,8 +9,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 3000
-      targetPort: 3000
+    - port: {{ .Values.reactPort }}
+      targetPort: {{ .Values.reactPort }}
       nodePort: 30300
   selector:
     name: {{ .Chart.Name }}-pod

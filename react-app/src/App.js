@@ -5,7 +5,8 @@ import Tasks from "./components/Tasks"
 import AddTask from './components/AddTask'
 
 const App = () => {
-  const api_url = process.env.REACT_APP_API_URL
+  const api_url = process.env.NODE_ENV === 'production' ? 'http://springboot.local/api' : process.env.REACT_APP_LOCAL_SPRINGBOOT_URL;
+  console.log(api_url)
 
   const [showAddTask, setShowAddTask] = useState(false)
   const [tasks, setTasks] = useState([])
@@ -37,7 +38,7 @@ const App = () => {
 
   // Add Task
   const addTask = async (task) => {
-    const res = await fetch(api_url + '/tasks', {
+    const res = await fetch(api_url + 'tasks', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',

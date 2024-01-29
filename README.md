@@ -82,7 +82,11 @@ Postgres can be installed on the Minikube cluster so that the Spring Boot applic
 helm install example-postgres-release-1 helm/postgres
 ```
 
-Note `example-postgres-release-1` can be replaced with whatever release name you want to use.
+Note `example-postgres-release-1` can be replaced with whatever release name you want to use. You can verify the pod is running by using the following command and checking that the status is set to "Running":
+
+```
+kubectl get pods --selector=name=postgres-pod
+```
 
 ### Backend Release on Minikube
 
@@ -92,15 +96,19 @@ To install the Spring Boot release on your Minikube cluster, using the following
 helm install -f helm/environments/minikube.yaml example-springboot-release-1 helm/springboot
 ```
 
-Note `example-springboot-release-1` can be replaced with whatever release name you want to use.
+Note `example-springboot-release-1` can be replaced with whatever release name you want to use. You can verify the pod is running by using the following command and checking that the status is set to "Running":
 
-To see the backend running via Minikube use:
+```
+kubectl get pods --selector=name=springboot-pod
+```
+
+To see the backend service running via Minikube use:
 
 ```
 minikube service springboot-service
 ```
 
-This will open up a browser window that will show the Spring Boot application running. Navigate to `/api/tasks` and you should see JSON containing the current tasks. When the application just starts, that JSON code should look like:
+This will open up a browser window that will show the Spring Boot application running. Note that by default this will open the Spring Boot application on a URL that doesn't have an endpoint associated with it so it will appear as though there is an error even though there is not. Navigate to `/api/tasks` and you should see JSON containing the current tasks. When the application just starts, that JSON code should look like:
 
 ```
 [
@@ -127,21 +135,39 @@ This will open up a browser window that will show the Spring Boot application ru
 
 ### Frontend Release on Minikube
 
+To install the React application release on your Minikube cluster, using the following command:
+
 ```
 helm install -f helm/environments/minikube.yaml example-react-app-release-1 helm/react-app
 ```
 
-Note `example-react-app-release-1` can be replaced with whatever release name you want to use.
+Note `example-react-app-release-1` can be replaced with whatever release name you want to use. You can verify the pods are running by using the following command and checking that the status is set to "Running":
 
-To see the frontend running via Minikube use:
+```
+kubectl get pods --selector=name=react-app-pod
+```
+
+To see the frontend service running via Minikube use:
 
 ```
 minikube service react-app-service
 ```
 
-This will open up a browser window that will show the React application running.
+This will open up a browser window that will show the React application running. Note: at this point the React application will not connect to the backend Spring Boot service. We need to start the `minikube tunnel` as described below to allow the Spring Boot and React Ingress to work.
 
 ### Minikube Tunnel
+
+As the application stands right now, the Spring Boot and React Ingress will not work until a Minikube Tunnel is created. We need the Ingress because our React application actually calls the Spring Boot backend from our browser - so need it to be publically available to our browser.
+
+Append `127.0.0.1 springboot.local` and `127.0.0.1 reactapp.local` to your `/etc/hosts` file on MacOS (NOTE: Do **NOT** use the Minikube IP).
+
+Run the following command (and keep the terminal window open) to open up a Minikube tunnel to the ingress. This command may prompt you for your sudo password:
+
+```
+minikube tunnel
+```
+
+Go to [http://springboot.local/](http://springboot.local/) and you should see the same output as you did when running `minikube service springboot-service`. Go to [http://reactapp.local/](http://reactapp.local/) you will see the frontend React app running.
 
 ### Extra Tips/Tricks
 
@@ -153,13 +179,19 @@ Error: INSTALLATION FAILED: cannot re-use a name that is still in use
 
 In this case you will either need to use the `upgrade` command or `uninstall` command. The `upgrade` command will allow you to upgrade your deployment so that you can rollback and should be used in most real world cases. The `uninstall` command will remove the release entirely at which point you can then re-install the release.
 
-To upgrade a release using helm use the `upgrade` commmand. An example:
+To upgrade a release using helm use the `upgrade` commmand. For example, to upgrade the Spring Boot application use:
 
 ```
 helm upgrade example-springboot-release-1 helm/springboot -f helm/springboot/environments/minikube.yaml
 ```
 
-Alternatively, you can uninstall a deployment using the `uninstall` command. An example looks like:
+To upgrade the React application use:
+
+```
+helm upgrade example-react-app-release-1 helm/react-app -f helm/environments/minikube.yaml
+```
+
+Alternatively, you can uninstall a deployment using the `uninstall` command. An example of uninstalling a release looks like:
 
 ```
 helm uninstall example-postgres-release-1
@@ -194,6 +226,20 @@ kubectl exec -it <pod-name> -- /bin/sh
 ```
 
 eg: `kubectl exec -it pod/react-app-deployment-74986868db-8stn8 -- /bin/sh`. Once in a pod like this you could run commands such as cURL to test if your DNS are setup properly, something like `curl http://springboot-service:8080/api/tasks` will test if a React pod can connect to the Spring Boot service to get JSON responses back from the backend API.
+
+## Helm Commands
+
+To update a Helm deployment use the following command:
+
+```
+helm upgrade [release-name] [chart-directory]
+```
+
+For example, to upgrade the React application Helm deployment, run the following command:
+
+```
+helm upgrade -f helm/environments/minikube.yaml example-react-app-release-1 helm/react-app
+```
 
 ## Docker Commands
 

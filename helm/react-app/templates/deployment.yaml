@@ -26,12 +26,7 @@ spec:
           image: {{ .Values.imageName }}:{{ .Values.imageTag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           ports:
-            - containerPort: 3000
+            - containerPort: {{ .Values.reactPort }}
           env:
-            - name: ENVIRONMENT
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ .Chart.Name }}-config
-                  key: environment-name
-            - name: REACT_APP_API_URL
-              value: {{ .Values.backendApiUrl }}
+            - name: REACT_APP_SPRINGBOOT_URL
+              value: {{ .Values.springbootUrl }}

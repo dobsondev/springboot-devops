@@ -8,5 +8,7 @@ imageName: dobsondev/springboot-devops_react
 imageTag: v0.1
 imagePullPolicy: Always
 
-backendApiUrl: http://springboot.local/api
+reactPort: 3000
+
 environment: local
+springbootUrl: http://springboot.local/api

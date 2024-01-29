@@ -9,3 +9,4 @@ imageTag: v0.1
 imagePullPolicy: Always
 
 environment: local
+springbootPort: 8080
