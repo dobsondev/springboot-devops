@@ -28,5 +28,10 @@ spec:
           ports:
             - containerPort: {{ .Values.reactPort }}
           env:
+            - name: ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Chart.Name }}-config
+                  key: environment-name
             - name: REACT_APP_SPRINGBOOT_URL
               value: {{ .Values.springbootUrl }}
