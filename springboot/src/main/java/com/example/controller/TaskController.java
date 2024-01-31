@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.model.Task;
 import com.example.repository.TaskRepository;
 
-// React App
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001", "http://reactapp.local"})
 @RestController
 @RequestMapping("/api")
 public class TaskController {
@@ -73,6 +71,7 @@ public class TaskController {
 	}
 
 	@PutMapping("/tasks/{id}")
+	@CrossOrigin
 	public ResponseEntity<Task> updateTask(@PathVariable("id") long id, @RequestBody Task task) {
 		Optional<Task> taskData = taskRepository.findById(id);
 
