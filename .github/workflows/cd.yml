@@ -43,7 +43,6 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: ./react-app
-        file: ./Dockerfile
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/springboot-devops_react:${{ inputs.reactDockerTag }}
 
@@ -52,6 +51,5 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: ./springboot
-        file: ./Dockerfile
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/springboot-devops_springboot:${{ inputs.springbootDockerTag }}
