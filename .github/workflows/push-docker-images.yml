@@ -38,6 +38,11 @@ on:
         required: true
         default: 'v0.1'
         type: string
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+      DOCKERHUB_TOKEN:
+        required: true
 
 jobs:
   build:
