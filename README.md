@@ -171,6 +171,25 @@ Go to [http://springboot.local/](http://springboot.local/) and you should see th
 
 ### Extra Tips/Tricks
 
+To access the Postgres database in the Minikube cluster, use the following commands:
+
+```
+kubectl get pods --selector=name=postgres-pod
+```
+
+Note the Pod name and add it into the following command:
+
+```
+kubectl exec -it pod/[postgres-pod-name] -- psql -h localhost -U postgres
+```
+
+From there you can use Postgres commands as described in the section later in this README. Just as an example of a common set of commands you will want to run - to connect to the `postgres` database and then list the contents of the `tasks` table use the following two commands:
+
+```
+\c postgres
+TABLE tasks;
+```
+
 If you have already installed via Helm then trying to re-install will produce the following error:
 
 ```
