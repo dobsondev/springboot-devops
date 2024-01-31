@@ -14,25 +14,11 @@ Technologies used:
 - [Minikube](https://minikube.sigs.k8s.io/docs/)
 - [Helm](https://helm.sh/)
 
-## Local Setup
+## Local Development Setup
 
-To setup on your local, first run:
+The local development build of this project leverages `docker compose` to create a quick a simple connection between the different services.
 
-```
-docker compose build
-```
-
-This will build the Docker image for the Spring Boot application which has a custom Dockerfile located at `springboot/Dockerfile`.
-
-Once that is done ensure that all node dependencies are installed by running:
-
-```
-docker compose run react-app npm install
-```
-
-By keeping this step outside of the `docker-compose.yml` file you save a lot of start-up time that would be spend running the install command each time.
-
-Finally - run the following command to bring up the project locally:
+To spin up the local development environment, simply run the following command:
 
 ```
 docker compose up [-d]
@@ -171,53 +157,6 @@ minikube tunnel
 
 Go to [http://springboot.local/](http://springboot.local/) and you should see the same output as you did when running `minikube service springboot-service`. Go to [http://reactapp.local/](http://reactapp.local/) you will see the frontend React app running.
 
-### Extra Tips/Tricks
-
-To access the Postgres database in the Minikube cluster, use the following commands:
-
-```
-kubectl get pods --selector=name=postgres-pod
-```
-
-Note the Pod name and add it into the following command:
-
-```
-kubectl exec -it pod/[postgres-pod-name] -- psql -h localhost -U postgres
-```
-
-From there you can use Postgres commands as described in the section later in this README. Just as an example of a common set of commands you will want to run - to connect to the `postgres` database and then list the contents of the `tasks` table use the following two commands:
-
-```
-\c postgres
-TABLE tasks;
-```
-
-If you have already installed via Helm then trying to re-install will produce the following error:
-
-```
-Error: INSTALLATION FAILED: cannot re-use a name that is still in use
-```
-
-In this case you will either need to use the `upgrade` command or `uninstall` command. The `upgrade` command will allow you to upgrade your deployment so that you can rollback and should be used in most real world cases. The `uninstall` command will remove the release entirely at which point you can then re-install the release.
-
-To upgrade a release using helm use the `upgrade` commmand. For example, to upgrade the Spring Boot application use:
-
-```
-helm upgrade example-springboot-release-1 helm/springboot -f helm/springboot/environments/minikube.yaml
-```
-
-To upgrade the React application use:
-
-```
-helm upgrade example-react-app-release-1 helm/react-app -f helm/environments/minikube.yaml
-```
-
-Alternatively, you can uninstall a deployment using the `uninstall` command. An example of uninstalling a release looks like:
-
-```
-helm uninstall example-postgres-release-1
-```
-
 ## Minikube `kubectl` Commands
 
 After running `minikube start` your `kubectl` context will be set to use Minikube. This means any commands you run with `kubectl` should connect to Minikube.
@@ -248,21 +187,32 @@ kubectl exec -it <pod-name> -- /bin/sh
 
 eg: `kubectl exec -it pod/react-app-deployment-74986868db-8stn8 -- /bin/sh`. Once in a pod like this you could run commands such as cURL to test if your DNS are setup properly, something like `curl http://springboot-service:8080/api/tasks` will test if a React pod can connect to the Spring Boot service to get JSON responses back from the backend API.
 
-## Helm Commands
+## Continuous Integration / Continuous Delivery
 
-To update a Helm deployment use the following command:
+### Integration
 
-```
-helm upgrade [release-name] [chart-directory]
-```
+Each pull request into the `main` branch on GitHub will trigger the `./github/workflows/ci.yml` to run. This will perform the following checks:
 
-For example, to upgrade the React application Helm deployment, run the following command:
+1. Ensure we can login to DockerHub using the setup GitHub secrets
+2. Ensure the React Docker image can be built successfully
+3. Ensure the Spring Boot Docker image can be built successfully
 
-```
-helm upgrade -f helm/environments/minikube.yaml example-react-app-release-1 helm/react-app
-```
+#### TODO
 
-## Docker Commands
+1. Automated testing needs to be written for each application and ran through this workflow
+
+### Delivery
+
+There are a few ways that delivery can happen for this application currently. First, a user may manually run the "Push Docker Images to DockerHub" (`./github/workflows/push-docker-images.yml`) workflow via the [Actions](https://github.com/dobsondev/springboot-devops/actions/workflows/push-docker-images.yml) tab on the GitHub repo. This allows a user to manually push up the images using the pre-defined workflows.
+
+There is also an automatic delivery mechanism setup. If GitHub detects changes to either the `./springboot` or `./react-app` directories when merged to main then either the `./github/workflows/cd-push-springboot-image.yml` or `./github/workflows/cd-push-react-image.yml` will automatically trigger. Both of these workflows do the same thing as the manual "Push Docker Images to DockerHub" workflow but automatically when changes happen.
+
+#### TODO
+
+1. The `./github/workflows/push-docker-images.yml` does the same thing as `./github/workflows/cd-push-springboot-image.yml` and `./github/workflows/cd-push-react-image.yml` and some code is repeated - need to make more DRY
+2. Create CD for Kubernetes cluster deployment using Helm - maybe temporarily make a AWS EKS cluster with Terraform and deploy to it just as a test then turn it off after validating it works
+
+## Docker
 
 Create a push the Spring Boot image to Dockerhub:
 
@@ -278,17 +228,90 @@ docker build -t dobsondev/springboot-devops_react:v0.1 ./react-app
 docker push dobsondev/springboot-devops_react:v0.1
 ```
 
-## Postgres Commands
+## Helm
 
-I am not as familiar with using Postgres as I am other database tools, so I wanted to create a list of Postgres commands here for my own reference.
+If you have already installed a release to the Minikube cluster via Helm then trying to re-install will produce the following error:
 
-To connect to the Postgres command line tool while working on your local, run the following command:
+```
+Error: INSTALLATION FAILED: cannot re-use a name that is still in use
+```
+
+In this case you will either need to use the `upgrade` command or `uninstall` command. The `upgrade` command will allow you to upgrade your deployment so that you can rollback and should be used in most real world cases. The `uninstall` command will remove the release entirely at which point you can then re-install the release.
+
+### Update a Helm Release
+
+To update a Helm release use the following command:
+
+```
+helm upgrade [release-name] [chart-directory] [-f [environment-yaml]]
+```
+
+For example, to upgrade the React application Helm release, run the following command:
+
+```
+helm upgrade example-react-app-release-1 helm/react-app -f helm/environments/minikube.yaml
+```
+
+As another example, to upgrade the Spring Boot application Helm release use:
+
+```
+helm upgrade example-springboot-release-1 helm/springboot -f helm/springboot/environments/minikube.yaml
+```
+
+### Uninstall a Helm Release
+
+To uninstall a Helm release use the following command:
+
+```
+helm uninstall [release-name]
+```
+
+For example, to unistall the React application Helm release, run the following command:
+
+```
+helm uninstall example-react-app-release-1
+```
+
+As another example, to uninstall the Spring Boot application release use:
+
+```
+helm uninstall example-springboot-release-1
+```
+
+## Postgres
+
+### Connect to Postgres on Local Development Environment
+
+To connect to the Postgres command line tool while working on your local development environmment (using `docker compose`), run the following command:
 
 ```
 docker compose exec postgres psql -h localhost -U compose-postgres
 ```
 
-You can then show all the databases table by using:
+### Connect to Postgres on Minikube Cluster
+
+To access the Postgres database in the Minikube cluster, use the following commands:
+
+```
+kubectl get pods --selector=name=postgres-pod
+```
+
+Note the Pod name and add it into the following command:
+
+```
+kubectl exec -it pod/[postgres-pod-name] -- psql -h localhost -U postgres
+```
+
+From there you can use Postgres commands as described in the section later in this README. Just as an example of a common set of commands you will want to run - to connect to the `postgres` database and then list the contents of the `tasks` table use the following two commands:
+
+```
+\c postgres
+TABLE tasks;
+```
+
+### Helpful Postgres Commands
+
+Once connected to Postgres, you can then show all the databases table by using:
 
 ```
 \l
