@@ -1,5 +1,7 @@
 # React / Spring Boot DevOps Example Project
 
+[![Continuous Integration](https://github.com/dobsondev/springboot-devops/actions/workflows/ci.yml/badge.svg)](https://github.com/dobsondev/springboot-devops/actions/workflows/ci.yml)
+
 This is a sample application that provides a "Task Tracker" application. The backend API is written in Java using Spring Boot which connects to a Postgres database and the frontend is a React app.
 
 Technologies used:
