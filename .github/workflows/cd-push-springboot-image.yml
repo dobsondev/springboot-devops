@@ -7,27 +7,13 @@ on:
       - springboot/**
 
 env:
-  SPRINGBOOT_TAG: ${{ secrets.DOCKERHUB_USERNAME }}/springboot-devops_springboot:v0.1
+  SPRINGBOOT_TAG: v0.1
 
 jobs:
-  build:
-    name: Create and Push Spring Boot Docker Image to DockerHub
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Login to DockerHub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Build Spring Boot Docker Image and Push to DockerHub
-      uses: docker/build-push-action@v5
-      with:
-        context: ./springboot
-        push: true
-        tags: ${{ env.SPRINGBOOT_TAG }}
+  call-push-docker-images:
+    uses: dobsondev/springboot-devops/.github/workflows/push-docker-images.yml@main
+    with:
+      buildReactDockerImage: false
+      reactDockerTag: SPRINGBOOT_TAG
+      buildSpringbootDockerImage: true
+      springbootDockerTag: SPRINGBOOT_TAG
