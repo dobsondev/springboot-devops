@@ -21,8 +21,9 @@ public class SpringBootApp {
     @EventListener(ApplicationReadyEvent.class)
     public void runAfterStartup() {
         this.repository.save(new Task("Task #1", "Description for task 1.", true));
-        this.repository.save(new Task("Task #2", "Description for task 2.", true));
+        this.repository.save(new Task("Task #2", "Description for task 2.", false));
         this.repository.save(new Task("Task #3", "Description for task 3.", true));
+        this.repository.save(new Task("Task #4", "Description for task 3.", false));
     }
 
 }

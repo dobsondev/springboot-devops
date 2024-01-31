@@ -10,7 +10,7 @@ env:
 
 jobs:
   dockerhub_login_check:
-    name: Login to DockerHub
+    name: Test Login to DockerHub
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
