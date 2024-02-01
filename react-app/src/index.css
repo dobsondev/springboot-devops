@@ -62,7 +62,7 @@ body {
 }
 
 .task.reminder {
-  border-left: 0.5rem solid green;
+  border-left: 0.4rem solid green;
 }
 
 .task h3 {

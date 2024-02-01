@@ -15,9 +15,9 @@ jobs:
     uses: dobsondev/springboot-devops/.github/workflows/push-docker-images.yml@main
     with:
       buildReactDockerImage: false
-      reactDockerTag: SPRINGBOOT_TAG
+      reactDockerTag: ${{ env.SPRINGBOOT_TAG }}
       buildSpringbootDockerImage: true
-      springbootDockerTag: SPRINGBOOT_TAG
+      springbootDockerTag: ${{ env.SPRINGBOOT_TAG }}
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
