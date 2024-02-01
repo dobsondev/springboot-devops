@@ -1,4 +1,4 @@
-name: Auto Push React Docker Image to DockerHub
+name: Auto Push Latest React Docker Image to DockerHub
 
 on: 
   push:
@@ -7,10 +7,11 @@ on:
       - react-app/**
 
 env:
-  REACT_TAG: v0.1
+  REACT_TAG: latest
 
 jobs:
   call-push-docker-images:
+    name: Call Push Docker Images Workflow for Latest React Image
     uses: dobsondev/springboot-devops/.github/workflows/push-docker-images.yml@main
     with:
       buildReactDockerImage: true
