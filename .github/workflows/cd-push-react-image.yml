@@ -6,18 +6,15 @@ on:
     paths:
       - react-app/**
 
-env:
-  REACT_TAG: latest
-
 jobs:
   call-push-docker-images:
     name: Call Push Docker Images Workflow for Latest React Image
     uses: dobsondev/springboot-devops/.github/workflows/push-docker-images.yml@main
     with:
       buildReactDockerImage: true
-      reactDockerTag: ${{ env.REACT_TAG }}
+      reactDockerTag: latest
       buildSpringbootDockerImage: false
-      springbootDockerTag: ${{ env.REACT_TAG }}
+      springbootDockerTag: latest
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
