@@ -209,7 +209,7 @@ There is also an automatic delivery mechanism setup. If GitHub detects changes t
 
 #### TODO
 
-1. The `./github/workflows/push-docker-images.yml` does the same thing as `./github/workflows/cd-push-springboot-image.yml` and `./github/workflows/cd-push-react-image.yml` and some code is repeated - need to make more DRY
+1. Create workflows for CD where if a GitHub release is made then we automatically push that tag to DockerHub.
 2. Create CD for Kubernetes cluster deployment using Helm - maybe temporarily make a AWS EKS cluster with Terraform and deploy to it just as a test then turn it off after validating it works
 
 ## Docker

@@ -10,7 +10,7 @@ on:
       reactDockerTag:
         description: 'React Docker Tag'
         required: true
-        default: 'v0.1'
+        default: 'latest'
         type: string
       buildSpringbootDockerImage:
         description: 'Build New Springboot Docker Image'
@@ -19,7 +19,7 @@ on:
       springbootDockerTag:
         description: 'Spring Boot Docker Tag'
         required: true
-        default: 'v0.1'
+        default: 'latest'
         type: string
 
   workflow_call:
@@ -29,14 +29,14 @@ on:
         type: boolean
       reactDockerTag:
         required: true
-        default: 'v0.1'
+        default: 'latest'
         type: string
       buildSpringbootDockerImage:
         required: false
         type: boolean
       springbootDockerTag:
         required: true
-        default: 'v0.1'
+        default: 'latest'
         type: string
     secrets:
       DOCKERHUB_USERNAME:

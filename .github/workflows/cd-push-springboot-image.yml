@@ -1,4 +1,4 @@
-name: Auto Push Spring Boot Docker Image to DockerHub
+name: Auto Push Latest Spring Boot Docker Image to DockerHub
 
 on: 
   push:
@@ -7,10 +7,11 @@ on:
       - springboot/**
 
 env:
-  SPRINGBOOT_TAG: v0.1
+  SPRINGBOOT_TAG: latest
 
 jobs:
   call-push-docker-images:
+    name: Call Push Docker Images Workflow for Latest Spring Boot Image
     uses: dobsondev/springboot-devops/.github/workflows/push-docker-images.yml@main
     with:
       buildReactDockerImage: false
