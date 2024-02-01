@@ -6,18 +6,15 @@ on:
     paths:
       - springboot/**
 
-env:
-  SPRINGBOOT_TAG: latest
-
 jobs:
   call-push-docker-images:
     name: Call Push Docker Images Workflow for Latest Spring Boot Image
     uses: dobsondev/springboot-devops/.github/workflows/push-docker-images.yml@main
     with:
       buildReactDockerImage: false
-      reactDockerTag: ${{ env.SPRINGBOOT_TAG }}
+      reactDockerTag: latest
       buildSpringbootDockerImage: true
-      springbootDockerTag: ${{ env.SPRINGBOOT_TAG }}
+      springbootDockerTag: latest
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
