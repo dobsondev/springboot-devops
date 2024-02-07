@@ -9,7 +9,7 @@ on:
 jobs:
   call-push-docker-images:
     name: Build and Push Latest React Image
-    uses: dobsondev/springboot-devops/.github/workflows/push-docker-images.yml@main
+    uses: dobsondev/springboot-devops/.github/workflows/cd-build-and-push.yml@main
     with:
       buildReactDockerImage: true
       reactDockerTag: latest
