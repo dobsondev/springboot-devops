@@ -27,8 +27,18 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
     - name: Build Test React Image
-      run: docker build -t ${{ env.REACT_TEST_IMAGE }} ./react-app
+      uses: docker/build-push-action@v5
+      with:
+        context: ./react-app
+        platforms: linux/amd64,linux/arm64,linux/arm64/v8
+        tags: ${{ env.REACT_TEST_IMAGE }}
 
   build_springboot_docker_image:
     name: Test Building Spring Boot Image
@@ -36,5 +46,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
     - name: Test Building Springboot Docker Image
-      run: docker build -t ${{ env.SPRINGBOOT_TEST_IMAGE }} ./springboot
+      uses: docker/build-push-action@v5
+      with:
+        context: ./springboot
+        platforms: linux/amd64,linux/arm64,linux/arm64/v8
+        tags: ${{ env.SPRINGBOOT_TEST_TAG }}
