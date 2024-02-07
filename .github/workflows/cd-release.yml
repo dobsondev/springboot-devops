@@ -1,4 +1,4 @@
-name: Push Release Docker Images to DockerHub
+name: Build and Push Release Docker Images
 
 on:
   release:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   call-push-docker-images:
-    name: Call Push Docker Images Workflow for Release Images
+    name: Build and Push Release Docker Images
     uses: dobsondev/springboot-devops/.github/workflows/push-docker-images.yml@main
     with:
       buildReactDockerImage: true
