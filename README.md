@@ -239,20 +239,6 @@ Error: INSTALLATION FAILED: cannot re-use a name that is still in use
 
 In this case you will either need to use the `upgrade` command or `uninstall` command. The `upgrade` command will allow you to upgrade your deployment so that you can rollback and should be used in most real world cases. The `uninstall` command will remove the release entirely at which point you can then re-install the release.
 
-### Overwrite a Helm Value
-
-To overwrite a Helm value, simple add `--set valueName=valueValue` to your command line commands. For example, to overwrite the tag for the Spring Boot image when installing the Helm release, use the following:
-
-```bash
-helm install example-springboot-release-1 helm/springboot -f helm/environments/minikube.yaml --set imageTag=v0.3-alpha-3
-```
-
-To overwrite the tag for the React image when installing the Helm release, use the following:
-
-```bash
-helm install example-react-app-release-1 helm/react-app -f helm/environments/minikube.yaml --set imageTag=v0.3-alpha-3
-```
-
 ### Update a Helm Release
 
 To update a Helm release use the following command:
@@ -261,16 +247,16 @@ To update a Helm release use the following command:
 helm upgrade [release-name] [chart-directory] [-f [environment-yaml]]
 ```
 
-For example, to upgrade the React application Helm release, run the following command:
+For example, to upgrade the Spring Boot application Helm release use:
+
+```bash
+helm upgrade example-springboot-release-1 helm/springboot -f helm/environments/minikube.yaml
+```
+
+As another example, to upgrade the React application Helm release, run the following command:
 
 ```bash
 helm upgrade example-react-app-release-1 helm/react-app -f helm/environments/minikube.yaml
-```
-
-As another example, to upgrade the Spring Boot application Helm release use:
-
-```bash
-helm upgrade example-springboot-release-1 helm/springboot -f helm/springboot/environments/minikube.yaml
 ```
 
 ### Uninstall a Helm Release
@@ -291,6 +277,32 @@ As another example, to uninstall the Spring Boot application release use:
 
 ```bash
 helm uninstall example-springboot-release-1
+```
+
+### Overwrite a Helm Value
+
+To overwrite a Helm value, simple add `--set valueName=valueValue` to your command line commands. For example, to overwrite the tag for the Spring Boot image when installing the Helm release, use the following:
+
+```bash
+helm install example-springboot-release-1 helm/springboot -f helm/environments/minikube.yaml --set imageTag=v0.3-alpha-3
+```
+
+If you wanted to overwrite the tag for a Spring Boot release upgrade, you could use the following:
+
+```bash
+helm upgrade example-springboot-release-1 helm/springboot -f helm/environments/minikube.yaml --set imageTag=v0.3-alpha-3
+```
+
+To overwrite the tag for the React image when installing the Helm release, use the following:
+
+```bash
+helm install example-react-app-release-1 helm/react-app -f helm/environments/minikube.yaml --set imageTag=v0.3-alpha-3
+```
+
+If you wanted to overwrite the tag for a React release upgrade, you could use the following:
+
+```bash
+helm upgrade example-react-app-release-1 helm/react-app -f helm/environments/minikube.yaml --set imageTag=v0.3-alpha-3
 ```
 
 ## Postgres
