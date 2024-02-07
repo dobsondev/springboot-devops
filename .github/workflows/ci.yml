@@ -57,4 +57,4 @@ jobs:
       with:
         context: ./springboot
         platforms: linux/amd64,linux/arm64,linux/arm64/v8
-        tags: ${{ env.SPRINGBOOT_TEST_TAG }}
+        tags: ${{ env.SPRINGBOOT_TEST_IMAGE }}
