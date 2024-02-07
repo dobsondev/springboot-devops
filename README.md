@@ -244,13 +244,13 @@ In this case you will either need to use the `upgrade` command or `uninstall` co
 To overwrite a Helm value, simple add `--set valueName=valueValue` to your command line commands. For example, to overwrite the tag for the Spring Boot image when installing the Helm release, use the following:
 
 ```bash
-helm install example-springboot-release-1 helm/springboot -f helm/environments/minikube.yaml --set imageTag=v0.3-alpha-1
+helm install example-springboot-release-1 helm/springboot -f helm/environments/minikube.yaml --set imageTag=v0.3-alpha-3
 ```
 
 To overwrite the tag for the React image when installing the Helm release, use the following:
 
 ```bash
-helm install example-react-app-release-1 helm/react-app -f helm/environments/minikube.yaml --set imageTag=v0.3-alpha-1
+helm install example-react-app-release-1 helm/react-app -f helm/environments/minikube.yaml --set imageTag=v0.3-alpha-3
 ```
 
 ### Update a Helm Release
