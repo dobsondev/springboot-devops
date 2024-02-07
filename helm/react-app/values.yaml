@@ -5,7 +5,7 @@
 replicaCount: 2
 
 imageName: dobsondev/springboot-devops_react
-imageTag: v0.1
+imageTag: v0.2
 imagePullPolicy: Always
 
 reactPort: 3000
