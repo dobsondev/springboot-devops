@@ -81,7 +81,7 @@ kubectl get pods --selector=name=postgres-pod
 To install the Spring Boot release on your Minikube cluster, using the following command:
 
 ```
-helm install -f helm/environments/minikube.yaml example-springboot-release-1 helm/springboot
+helm install example-springboot-release-1 helm/springboot -f helm/environments/minikube.yaml
 ```
 
 Note `example-springboot-release-1` can be replaced with whatever release name you want to use. You can verify the pod is running by using the following command and checking that the status is set to "Running":
@@ -126,7 +126,7 @@ This will open up a browser window that will show the Spring Boot application ru
 To install the React application release on your Minikube cluster, using the following command:
 
 ```
-helm install -f helm/environments/minikube.yaml example-react-app-release-1 helm/react-app
+helm install example-react-app-release-1 helm/react-app -f helm/environments/minikube.yaml
 ```
 
 Note `example-react-app-release-1` can be replaced with whatever release name you want to use. You can verify the pods are running by using the following command and checking that the status is set to "Running":
@@ -218,15 +218,15 @@ There is one more part to the continuous delivery system where if a release is p
 Create a push the Spring Boot image to Dockerhub:
 
 ```
-docker build -t dobsondev/springboot-devops_springboot:v0.1 ./springboot
-docker push dobsondev/springboot-devops_springboot:v0.1
+docker build -t dobsondev/springboot-devops_springboot:v0.2 ./springboot
+docker push dobsondev/springboot-devops_springboot:v0.2
 ```
 
 Create a push the React image to Dockerhub:
 
 ```
-docker build -t dobsondev/springboot-devops_react:v0.1 ./react-app
-docker push dobsondev/springboot-devops_react:v0.1
+docker build -t dobsondev/springboot-devops_react:v0.2 ./react-app
+docker push dobsondev/springboot-devops_react:v0.2
 ```
 
 ## Helm

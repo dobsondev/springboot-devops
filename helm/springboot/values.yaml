@@ -5,8 +5,9 @@
 replicaCount: 1
 
 imageName: dobsondev/springboot-devops_springboot
-imageTag: v0.1
+imageTag: v0.2
 imagePullPolicy: Always
 
-environment: local
 springbootPort: 8080
+
+environment: local
