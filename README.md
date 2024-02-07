@@ -20,7 +20,7 @@ The local development build of this project leverages `docker compose` to create
 
 To spin up the local development environment, simply run the following command:
 
-```bash
+```
 docker compose up [-d]
 ```
 
@@ -40,19 +40,19 @@ To deploy this application on a Minikube cluster (local Kubernetes cluster) we c
 
 Be sure to start your Minikube cluster before attempting to install the Helm releases. This can be done by running the following command:
 
-```bash
+```
 minikube start
 ```
 
 You will also need to install the `ingress` addon for Minikube to allow ingress to our backend service. More information about this process can be found at https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/. This can be done with the following command:
 
-```bash
+```
 minikube addons enable ingress
 ```
 
 You can verify the Ingress Controller pod is running with the following command:
 
-```bash
+```
 kubectl get pods -n ingress-nginx
 ```
 
@@ -66,13 +66,13 @@ Be sure to install the Helm releases in the following order:
 
 Postgres can be installed on the Minikube cluster so that the Spring Boot application has a database to use. Without it the application will fail to run. To install Postgres on your Minikube cluster using the following command:
 
-```bash
+```
 helm install example-postgres-release-1 helm/postgres
 ```
 
 Note `example-postgres-release-1` can be replaced with whatever release name you want to use. You can verify the pod is running by using the following command and checking that the status is set to "Running":
 
-```bash
+```
 kubectl get pods --selector=name=postgres-pod
 ```
 
@@ -80,25 +80,25 @@ kubectl get pods --selector=name=postgres-pod
 
 To install the Spring Boot release on your Minikube cluster, using the following command:
 
-```bash
+```
 helm install example-springboot-release-1 helm/springboot -f helm/environments/minikube.yaml
 ```
 
 Note `example-springboot-release-1` can be replaced with whatever release name you want to use. You can verify the pod is running by using the following command and checking that the status is set to "Running":
 
-```bash
+```
 kubectl get pods --selector=name=springboot-pod
 ```
 
 To see the backend service running via Minikube use:
 
-```bash
+```
 minikube service springboot-service
 ```
 
 This will open up a browser window that will show the Spring Boot application running. Note that by default this will open the Spring Boot application on a URL that doesn't have an endpoint associated with it so it will appear as though there is an error even though there is not. Navigate to `/api/tasks` and you should see JSON containing the current tasks. When the application just starts, that JSON code should look like:
 
-```json
+```
 [
    {
       "id":1,
@@ -125,19 +125,19 @@ This will open up a browser window that will show the Spring Boot application ru
 
 To install the React application release on your Minikube cluster, using the following command:
 
-```bash
+```
 helm install example-react-app-release-1 helm/react-app -f helm/environments/minikube.yaml
 ```
 
 Note `example-react-app-release-1` can be replaced with whatever release name you want to use. You can verify the pods are running by using the following command and checking that the status is set to "Running":
 
-```bash
+```
 kubectl get pods --selector=name=react-app-pod
 ```
 
 To see the frontend service running via Minikube use:
 
-```bash
+```
 minikube service react-app-service
 ```
 
@@ -151,7 +151,7 @@ Append `127.0.0.1 springboot.local` and `127.0.0.1 reactapp.local` to your `/etc
 
 Run the following command (and keep the terminal window open) to open up a Minikube tunnel to the ingress. This command may prompt you for your sudo password:
 
-```bash
+```
 minikube tunnel
 ```
 
@@ -167,13 +167,13 @@ If you ever want to just restart your Minikube cluster - that can easily be done
 
 Get all pods, services, deployments and replicasets running on Minikube:
 
-```bash
+```
 kubectl get all
 ```
 
 Describe a pod, service, deployment or replicaset on the cluster:
 
-```bash
+```
 kubectl describe [TYPE NAME_PREFIX]
 ```
 
@@ -181,7 +181,7 @@ eg: `kubectl describe deployment postgres-deployment` or `kubectl describe pod/r
 
 Login to a pod to run a command (like cURL):
 
-```bash
+```
 kubectl exec -it <pod-name> -- /bin/sh
 ```
 
@@ -217,14 +217,14 @@ There is one more part to the continuous delivery system where if a release is p
 
 Create a push the Spring Boot image to Dockerhub:
 
-```bash
+```
 docker build -t dobsondev/springboot-devops_springboot:v0.2 ./springboot
 docker push dobsondev/springboot-devops_springboot:v0.2
 ```
 
 Create a push the React image to Dockerhub:
 
-```bash
+```
 docker build -t dobsondev/springboot-devops_react:v0.2 ./react-app
 docker push dobsondev/springboot-devops_react:v0.2
 ```
@@ -233,43 +233,29 @@ docker push dobsondev/springboot-devops_react:v0.2
 
 If you have already installed a release to the Minikube cluster via Helm then trying to re-install will produce the following error:
 
-```bash
+```
 Error: INSTALLATION FAILED: cannot re-use a name that is still in use
 ```
 
 In this case you will either need to use the `upgrade` command or `uninstall` command. The `upgrade` command will allow you to upgrade your deployment so that you can rollback and should be used in most real world cases. The `uninstall` command will remove the release entirely at which point you can then re-install the release.
 
-### Overwrite a Helm Value
-
-To overwrite a Helm value, simple add `--set valueName=valueValue` to your command line commands. For example, to overwrite the tag for the Spring Boot image when installing the Helm release, use the following:
-
-```bash
-helm install example-springboot-release-1 helm/springboot -f helm/environments/minikube.yaml --set imageTag=v0.3-alpha-1
-```
-
-To overwrite the tag for the React image when installing the Helm release, use the following:
-
-```bash
-helm install example-react-app-release-1 helm/react-app -f helm/environments/minikube.yaml --set imageTag=v0.3-alpha-1
-```
-
 ### Update a Helm Release
 
 To update a Helm release use the following command:
 
-```bash
+```
 helm upgrade [release-name] [chart-directory] [-f [environment-yaml]]
 ```
 
 For example, to upgrade the React application Helm release, run the following command:
 
-```bash
+```
 helm upgrade example-react-app-release-1 helm/react-app -f helm/environments/minikube.yaml
 ```
 
 As another example, to upgrade the Spring Boot application Helm release use:
 
-```bash
+```
 helm upgrade example-springboot-release-1 helm/springboot -f helm/springboot/environments/minikube.yaml
 ```
 
@@ -277,19 +263,19 @@ helm upgrade example-springboot-release-1 helm/springboot -f helm/springboot/env
 
 To uninstall a Helm release use the following command:
 
-```bash
+```
 helm uninstall [release-name]
 ```
 
 For example, to unistall the React application Helm release, run the following command:
 
-```bash
+```
 helm uninstall example-react-app-release-1
 ```
 
 As another example, to uninstall the Spring Boot application release use:
 
-```bash
+```
 helm uninstall example-springboot-release-1
 ```
 
@@ -299,7 +285,7 @@ helm uninstall example-springboot-release-1
 
 To connect to the Postgres command line tool while working on your local development environmment (using `docker compose`), run the following command:
 
-```bash
+```
 docker compose exec postgres psql -h localhost -U compose-postgres
 ```
 
@@ -307,19 +293,19 @@ docker compose exec postgres psql -h localhost -U compose-postgres
 
 To access the Postgres database in the Minikube cluster, use the following commands:
 
-```bash
+```
 kubectl get pods --selector=name=postgres-pod
 ```
 
 Note the Pod name and add it into the following command:
 
-```bash
+```
 kubectl exec -it pod/[postgres-pod-name] -- psql -h localhost -U postgres
 ```
 
 From there you can use Postgres commands as described in the section later in this README. Just as an example of a common set of commands you will want to run - to connect to the `postgres` database and then list the contents of the `tasks` table use the following two commands:
 
-```sql
+```
 \c postgres
 TABLE tasks;
 ```
@@ -328,48 +314,48 @@ TABLE tasks;
 
 Once connected to Postgres, you can then show all the databases table by using:
 
-```sql
+```
 \l
 ```
 
 You can select a database table to use by using:
 
-```sql
+```
 \c [database-table-name]
 ```
 
 In our case, that would be:
 
-```sql
+```
 \c compose-postgres
 ```
 
 From there you can describe the tables of the database by using:
 
-```sql
+```
 \dt
 ```
 
 If you want to then describe a particlar table, you can use:
 
-```sql
+```
 \d [table-name]
 ```
 
 In the case of this application, you would want to use:
 
-```sql
+```
 \d tasks
 ```
 
 If you want to see the contents of the `tasks` table you can use:
 
-```sql
+```
 TABLE tasks;
 ```
 
 Finally, when you are ready to quit the Postgres CLI, you can use:
 
-```sql
+```
 \q
 ```

@@ -1,4 +1,4 @@
-name: Build and Push Docker Images
+name: Push Docker Images to DockerHub
 
 on: 
   workflow_dispatch:
@@ -46,7 +46,7 @@ on:
 
 jobs:
   build:
-    name: Build and Push Docker Images
+    name: Create and Push Docker Images to DockerHub
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -57,14 +57,21 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build and Push React Image
-      if: ${{ inputs.buildReactDockerImage == true }}
-      run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/springboot-devops_react:${{ inputs.reactDockerTag }} ./react-app
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/springboot-devops_react:${{ inputs.reactDockerTag }}
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
-    - name: Build and Push Spring Boot Image
+    - name: Build React Docker Image and Push to DockerHub
+      if: ${{ inputs.buildReactDockerImage == true }}
+      uses: docker/build-push-action@v5
+      with:
+        context: ./react-app
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/springboot-devops_react:${{ inputs.reactDockerTag }}
+
+    - name: Build Spring Boot Docker Image and Push to DockerHub
       if: ${{ inputs.buildSpringbootDockerImage == true }}
-      run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/springboot-devops_springboot:${{ inputs.springbootDockerTag }} ./springboot
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/springboot-devops_springboot:${{ inputs.springbootDockerTag }}
+      uses: docker/build-push-action@v5
+      with:
+        context: ./springboot
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/springboot-devops_springboot:${{ inputs.springbootDockerTag }}

@@ -1,19 +1,19 @@
-name: Build and Push Latest React Image
+name: Auto Push Latest Spring Boot Docker Image to DockerHub
 
 on: 
   push:
     branches: [main]
     paths:
-      - react-app/**
+      - springboot/**
 
 jobs:
   call-push-docker-images:
-    name: Build and Push Latest React Image
+    name: Call Push Docker Images Workflow for Latest Spring Boot Image
     uses: dobsondev/springboot-devops/.github/workflows/push-docker-images.yml@main
     with:
-      buildReactDockerImage: true
+      buildReactDockerImage: false
       reactDockerTag: latest
-      buildSpringbootDockerImage: false
+      buildSpringbootDockerImage: true
       springbootDockerTag: latest
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}

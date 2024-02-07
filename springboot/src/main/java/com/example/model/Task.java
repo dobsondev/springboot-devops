@@ -20,7 +20,7 @@ public class Task {
 	private boolean reminder;
 
 	public Task() {
-		// Silence is golden...
+
 	}
 
 	public Task(String title, String description, boolean reminder) {
