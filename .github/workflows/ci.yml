@@ -22,7 +22,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
   build_react_docker_image:
-    name: Test Building React Image
+    name: Test Build React Image
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -41,7 +41,7 @@ jobs:
         tags: ${{ env.REACT_TEST_IMAGE }}
 
   build_springboot_docker_image:
-    name: Test Building Spring Boot Image
+    name: Test Build Spring Boot Image
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
