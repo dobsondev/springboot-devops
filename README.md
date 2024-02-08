@@ -93,13 +93,41 @@ You can verify the Ingress Controller pod is running with the following command:
 kubectl get pods -n ingress-nginx
 ```
 
-Be sure to install the Helm releases in the following order:
+I recommend installing the Helm releases in the following order:
 
 1. Postgres
 2. Spring Boot Backend
 3. React Frontend
 
-### Postgres Release on Minikube
+Please be aware, a helper script has been created that can automatically install all the Helm releases for you. Simply run the following script from the root directory of the project:
+
+```bash
+./scripts/install-all-helm-releases.sh
+```
+
+There is also another script that will automatically uninstall all the Helm releases which can be found at `./scripts/uninstall-all-helm-releases.sh`.
+
+If you do choose to use these scripts, be aware that the release names will match the release names given in the commands in this README - so the releases will be named:
+
+- `example-postgres-release-1`
+- `example-springboot-release-1`
+- `example-react-app-release-1`
+
+If you choose to use the helper script to install the Helm releases, then skip forward to the section titled [Minikube Tunnel](#minikube-tunnel) in this README to continue the local Minikube setup.
+
+Tip: If you want to overwrite the image tag for either of the two images when using the helper script, you can pass in arguments to do so as follows:
+
+```bash
+./scripts/install-all-helm-charts.sh reactimage=<react-tag> springbootimage=<springboot-tag>
+```
+
+As a real world example, you could have something like:
+
+```bash
+./scripts/install-all-helm-releases.sh reactimage=latest springbootimage=v0.3-alpha-3
+```
+
+### Manual Postgres Release on Minikube
 
 Postgres can be installed on the Minikube cluster so that the Spring Boot application has a database to use. Without it the application will fail to run. To install Postgres on your Minikube cluster using the following command:
 
@@ -113,7 +141,7 @@ Note `example-postgres-release-1` can be replaced with whatever release name you
 kubectl get pods --selector=name=postgres-pod
 ```
 
-### Backend Release on Minikube
+### Manual Spring Boot Release on Minikube
 
 To install the Spring Boot release on your Minikube cluster, using the following command:
 
@@ -164,7 +192,7 @@ This will open up a browser window that will show the Spring Boot application ru
 ]
 ```
 
-### Frontend Release on Minikube
+### Manual React Release on Minikube
 
 To install the React application release on your Minikube cluster, using the following command:
 
