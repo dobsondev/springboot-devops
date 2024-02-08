@@ -29,6 +29,41 @@ You can now use the following links:
 1. [http://localhost:3000](http://localhost:3000) will contain the frontend React application.
 2. [http://localhost:8080](http://localhost:8080) will contain the backend Spring Boot application, but you will want to go to [http://localhost:8080/api/tasks](http://localhost:8080/api/tasks) to see a display of all the tasks in your browser.
 
+### React Development
+
+The React application is setup so that any changes while running `docker compose up -d` will hot reload on the site. So simply make whatever changes are needed and you will see those reflected immediately.
+
+### Spring Boot Development
+
+To work on the Spring Boot application, make whatever changes you need to for the application. Once that is done you will need to build it. Most likely, your local computer will have a different version of Java than that of the container, so the best course of action is to connect to the container via:
+
+```bash
+docker compose exec springboot /bin/bash
+```
+
+Once connected to the container, change directories into the `/app` directory:
+
+```bash
+cd /app
+```
+
+From the `/app` directory you can build the project using:
+
+```bash
+./gradlew build
+```
+
+From there you can exit the application, and restart the containers using the following two commands:
+
+```bash
+docker compose down -v
+docker compose up -d
+```
+
+#### TODO
+
+- Hot reloading should work for Spring Boot since we mount `./springboot` to `/app` in our `docker-compose.yml` file, but it does not appear to. Need to look into that issue more because this is not ideal for development workflow.
+
 ## Helm & Minikube Setup
 
 To deploy this application on a Minikube cluster (local Kubernetes cluster) we can use Helm. To use this part of the setup, you must have the following already installed on your local system:
@@ -37,6 +72,8 @@ To deploy this application on a Minikube cluster (local Kubernetes cluster) we c
 - [Kubernetes / kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [Minikube](https://minikube.sigs.k8s.io/docs/start/)
 - [Helm](https://helm.sh/docs/intro/install/)
+
+Note: all of these commands are assumed to be run from the root directory of this project. The `helm` commands have relative paths in the command so these commands will not work as written if you are not in the project root.
 
 Be sure to start your Minikube cluster before attempting to install the Helm releases. This can be done by running the following command:
 
@@ -104,19 +141,25 @@ This will open up a browser window that will show the Spring Boot application ru
       "id":1,
       "title":"Task #1",
       "description":"Description for task 1.",
-      "reminder":true
+      "completed":true
    },
    {
       "id":2,
       "title":"Task #2",
       "description":"Description for task 2.",
-      "reminder":true
+      "completed":false
    },
    {
       "id":3,
       "title":"Task #3",
       "description":"Description for task 3.",
-      "reminder":true
+      "completed":true
+   },
+   {
+      "id":4,
+      "title":"Task #4",
+      "description":"Description for task 3.",
+      "completed":false
    }
 ]
 ```

@@ -79,7 +79,7 @@ public class TaskController {
 			Task _task = taskData.get();
 			_task.setTitle(task.getTitle());
 			_task.setDescription(task.getDescription());
-			_task.setReminder(task.isReminder());
+			_task.setCompleted(task.isCompleted());
 			return new ResponseEntity<>(taskRepository.save(_task), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -107,10 +107,10 @@ public class TaskController {
 
 	}
 
-	@GetMapping("/tasks/reminder")
-	public ResponseEntity<List<Task>> findByReminder() {
+	@GetMapping("/tasks/completed")
+	public ResponseEntity<List<Task>> findByCompleted() {
 		try {
-			List<Task> tasks = taskRepository.findByReminder(true);
+			List<Task> tasks = taskRepository.findByCompleted(true);
 
 			if (tasks.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
