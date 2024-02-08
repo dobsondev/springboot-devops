@@ -61,8 +61,8 @@ body {
   cursor: pointer;
 }
 
-.task.reminder {
-  border-left: 0.4rem solid green;
+.task.completed {
+  background: linear-gradient(to right, green, #f1f1f1);
 }
 
 .task h3 {

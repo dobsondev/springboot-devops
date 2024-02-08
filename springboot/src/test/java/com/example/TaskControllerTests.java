@@ -112,16 +112,16 @@ public class TaskControllerTests {
     }
 
     @Test
-    public void testFindByReminder() {
+    public void testFindByCompleted() {
         // Mock data
         List<Task> mockTasks = new ArrayList<>();
         mockTasks.add(new Task("Task 1", "Description 1", true));
         mockTasks.add(new Task("Task 2", "Description 2", true));
 
-        when(taskRepository.findByReminder(true)).thenReturn(mockTasks);
+        when(taskRepository.findByCompleted(true)).thenReturn(mockTasks);
 
         // Test the endpoint
-        ResponseEntity<List<Task>> response = taskController.findByReminder();
+        ResponseEntity<List<Task>> response = taskController.findByCompleted();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockTasks, response.getBody());

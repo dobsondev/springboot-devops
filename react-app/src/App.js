@@ -62,10 +62,10 @@ const App = () => {
       : alert('Error Deleting This Task')
   }
 
-  // Toggle Reminder
-  const toggleReminder = async (id) => {
+  // Toggle Completed
+  const toggleCompleted = async (id) => {
     const taskToToggle = await fetchTask(id)
-    const updTask = { ...taskToToggle, reminder: !taskToToggle.reminder }
+    const updTask = { ...taskToToggle, completed: !taskToToggle.completed }
 
     const res = await fetch(`${api_url}/tasks/${id}`, {
       method: 'PUT',
@@ -79,7 +79,7 @@ const App = () => {
 
     setTasks(
       tasks.map((task) =>
-        task.id === id ? { ...task, reminder: data.reminder } : task
+        task.id === id ? { ...task, completed: data.completed } : task
       )
     )
   }
@@ -95,7 +95,7 @@ const App = () => {
         <Tasks 
           tasks={tasks} 
           onDelete={deleteTask} 
-          onToggle={toggleReminder}
+          onToggle={toggleCompleted}
         />
       ) : (
         'No tasks to display.'

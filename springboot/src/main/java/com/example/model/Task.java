@@ -16,17 +16,17 @@ public class Task {
 	@Column(name = "description")
 	private String description;
 
-	@Column(name = "reminder")
-	private boolean reminder;
+	@Column(name = "completed")
+	private boolean completed;
 
 	public Task() {
 		// Silence is golden...
 	}
 
-	public Task(String title, String description, boolean reminder) {
+	public Task(String title, String description, boolean completed) {
 		this.title = title;
 		this.description = description;
-		this.reminder = reminder;
+		this.completed = completed;
 	}
 
 	public long getId() {
@@ -49,16 +49,16 @@ public class Task {
 		this.description = description;
 	}
 
-	public boolean isReminder() {
-		return reminder;
+	public boolean isCompleted() {
+		return completed;
 	}
 
-	public void setReminder(boolean isReminder) {
-		this.reminder = isReminder;
+	public void setCompleted(boolean isCompleted) {
+		this.completed = isCompleted;
 	}
 
 	@Override
 	public String toString() {
-		return "Task [id=" + id + ", title=" + title + ", desc=" + description + ", reminder=" + reminder + "]";
+		return "Task [id=" + id + ", title=" + title + ", desc=" + description + ", completed=" + completed + "]";
 	}
 }
